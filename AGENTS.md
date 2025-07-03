@@ -26,7 +26,7 @@
 - **Description**: 
     * Direct, 80 characters or less, 
     * Capitalize the first letter of the first word, the rest should be lowercase.
-    * Always end with a period (IMPORTANT).
+    * Always add a period (.) on the end of the description (IMPORTANT).
     * e.g `feat(app): Enhances list display and user interaction.`.
 - **Body**: Explain the "what" and "why". No bullet points, no bullet lists, just plain text. Ignore the body if the changes are small or self-explanatory, eg. `Introduces i18n support for list items.`. Do not list the files to be added in the body. If present, it should be a paragraph 100 characters or less.
 - **Footer**: Only add if breaking changes.
