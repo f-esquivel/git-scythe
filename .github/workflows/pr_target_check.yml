@@ -1,0 +1,33 @@
+name: Check PR Target Branch
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  check_branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get PR Base and Head Branches
+        run: |
+          echo "PR Base Branch: ${{ github.base_ref }}"
+          echo "PR Head Branch: ${{ github.head_ref }}"
+
+      - name: Enforce Branching Strategy
+        run: |
+          BASE_BRANCH="${{ github.base_ref }}"
+          HEAD_BRANCH="${{ github.head_ref }}"
+
+          # Rule 1: Only feature/* and fix/* branches can target release/* branches
+          if [[ "$BASE_BRANCH" == release/* && "$HEAD_BRANCH" != feature/* && "$HEAD_BRANCH" != fix/* ]]; then
+            echo "Error: Only feature/* and fix/* branches can target release/* branches."
+            exit 1
+          fi
+
+          # Rule 2: Only release/* branches can target 'main'
+          if [[ "$BASE_BRANCH" == "main" && "$HEAD_BRANCH" != release/* ]]; then
+            echo "Error: Only release branches (release/*) can target the 'main' branch."
+            exit 1
+          fi
+
+          echo "Branching strategy check passed."
