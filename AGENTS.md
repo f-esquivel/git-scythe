@@ -58,7 +58,7 @@ BREAKING CHANGE: the bump of the dependency is not compatible with the previous 
 ```
 
 # Commiting Changes
-- **Commit**: NEVER COMMIT WITHOUT PREVIEWING. Only commit when the prompt strictly is `commit changes`
+- **Commit**: NEVER COMMIT WITHOUT PREVIEWING. Only commit when the prompt strictly is `commit changes`.
 - **Preview**: Preview generated commit message and added/staged/unstaged files before actual commiting. If the message is not correct, do not commit. The prompt `generate commit` or similars are not valid for commiting changes, just to enable the preview. Do not list the files to be added in the commit message. Do not add/stage files to the commit, only the `commit` command is valid for commiting changes and adding/staging files.
 - **Files**: If we have staged/added files, generate the commit and proceed to evaluate all the committing flow based on those files. Only, and only if we don't have added/staged files, work with all the unstaged changes.
 
@@ -67,3 +67,10 @@ BREAKING CHANGE: the bump of the dependency is not compatible with the previous 
 - **Dev**: Development branch, always yellow
 - **Feature**: Feature branch, always blue
 - **Hotfix**: Hotfix branch, always red
+
+# GitHub
+Use `gh` commands to interact with GitHub.
+
+- **CodeRabbit Review**: To trigger a CodeRabbit review, first identify the current branch's open Pull Request. If a PR exists, post a comment with `@coderabbitai review` to initiate the review process. If no PR exists, ignore the review process.
+  - `gh pr view --json number --jq '.number'`: Get the PR number for the current branch.
+  - `gh pr comment <PR_NUMBER> -b "@coderabbitai review"`: Trigger the review.
