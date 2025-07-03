@@ -23,7 +23,11 @@
 - **Format**: Use [Conventional Commits](https://www.conventionalcommits.org/).
 - **Type**: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`.
 - **Scope**: Optional, e.g., `feat(parser): add new feature`. If not scope it's recognized, ignore it.
-- **Description**: Direct, 80 characters or less, lowercase, capitalize the first letter of the first word, ALWAYS END WITH A PERIOD, e.g `feat(app): enhances list display and user interaction.`.
+- **Description**: 
+    * Direct, 80 characters or less, 
+    * Capitalize the first letter of the first word, the rest should be lowercase.
+    * Always end with a period (IMPORTANT).
+    * e.g `feat(app): Enhances list display and user interaction.`.
 - **Body**: Explain the "what" and "why". No bullet points, no bullet lists, just plain text. Ignore the body if the changes are small or self-explanatory, eg. `Introduces i18n support for list items.`. Do not list the files to be added in the body. If present, it should be a paragraph 100 characters or less.
 - **Footer**: Only add if breaking changes.
 
@@ -39,7 +43,7 @@ The commit message should be structured as follows:
 
 ### Examples:
 
-`refactor(utils): Moves dependency to correct package declaration`
+`refactor(utils): Moves dependency to correct package declaration.`
 
 ```
 style: Updates layout colors.
