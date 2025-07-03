@@ -1,19 +1,14 @@
-name: Check PR Target Branch
+name: Validate Branching Strategy Consistency
 
 on:
   pull_request:
     types: [opened, synchronize, reopened]
 
 jobs:
-  check_branch:
+  validate_branching_strategy:
     runs-on: ubuntu-latest
     steps:
-      - name: Get PR Base and Head Branches
-        run: |
-          echo "PR Base Branch: ${{ github.base_ref }}"
-          echo "PR Head Branch: ${{ github.head_ref }}"
-
-      - name: Enforce Branching Strategy
+      - name: Validate Branching Strategy
         run: |
           BASE_BRANCH="${{ github.base_ref }}"
           HEAD_BRANCH="${{ github.head_ref }}"
@@ -30,4 +25,4 @@ jobs:
             exit 1
           fi
 
-          echo "Branching strategy check passed."
+          echo "Branching strategy consistency check passed."
