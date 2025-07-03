@@ -16,13 +16,13 @@ jobs:
           set -euo pipefail
 
           # Rule 1: Only feature/* and fix/* branches can target release/* branches
-          if [[ "$BASE_BRANCH" == release/* && "$HEAD_BRANCH" != feature/* && "$HEAD_BRANCH" != fix/* ]]; then
+          if [[ $BASE_BRANCH == release/* && $HEAD_BRANCH != feature/* && $HEAD_BRANCH != fix/* ]]; then
             echo "Error: Only feature/* and fix/* branches can target release/* branches."
             exit 1
           fi
 
           # Rule 2: Only release/* branches can target 'main'
-          if [[ "$BASE_BRANCH" == "main" && "$HEAD_BRANCH" != release/* ]]; then
+          if [[ $BASE_BRANCH == "main" && $HEAD_BRANCH != release/* ]]; then
             echo "Error: Only release branches (release/*) can target the 'main' branch."
             exit 1
           fi
