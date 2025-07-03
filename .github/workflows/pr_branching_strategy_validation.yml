@@ -1,0 +1,30 @@
+name: Validate Branching Strategy Consistency
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  validate_branching_strategy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate Branching Strategy
+        env:
+          BASE_BRANCH: ${{ github.base_ref }}
+          HEAD_BRANCH: ${{ github.head_ref }}
+        run: |
+          set -euo pipefail
+
+          # Rule 1: Only feature/* and fix/* branches can target release/* branches
+          if [[ $BASE_BRANCH == release/* && $HEAD_BRANCH != feature/* && $HEAD_BRANCH != fix/* ]]; then
+            echo "Error: Only feature/* and fix/* branches can target release/* branches."
+            exit 1
+          fi
+
+          # Rule 2: Only release/* branches can target 'main'
+          if [[ $BASE_BRANCH == "main" && $HEAD_BRANCH != release/* ]]; then
+            echo "Error: Only release branches (release/*) can target the 'main' branch."
+            exit 1
+          fi
+
+          echo "Branching strategy consistency check passed."
