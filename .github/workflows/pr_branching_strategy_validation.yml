@@ -9,9 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Validate Branching Strategy
+        env:
+          BASE_BRANCH: ${{ github.base_ref }}
+          HEAD_BRANCH: ${{ github.head_ref }}
         run: |
-          BASE_BRANCH="${{ github.base_ref }}"
-          HEAD_BRANCH="${{ github.head_ref }}"
+          set -euo pipefail
 
           # Rule 1: Only feature/* and fix/* branches can target release/* branches
           if [[ "$BASE_BRANCH" == release/* && "$HEAD_BRANCH" != feature/* && "$HEAD_BRANCH" != fix/* ]]; then
