@@ -25,17 +25,17 @@
 - **Format**: Use [Conventional Commits](https://www.conventionalcommits.org/).
 - **Type**: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`.
 - **Scope**: Optional, e.g., `feat(parser): add new feature`. If not scope it's recognized, ignore it.
-- **Description**: 
-    - Direct, 80 characters or less, 
-    - Capitalize the first letter of the first word, the rest should be lowercase.
-    - Always add a period (.) on the end of the description (IMPORTANT).
-    - e.g `feat(app): Enhances list display and user interaction.`.
-- **Body**: Explain the "what" and "why". No bullet points, no bullet lists, just plain text. Ignore the body if the changes are small or self-explanatory, eg. `Introduces i18n support for list items.`. Do not list the files to be added in the body. If present, it should be a paragraph 100 characters or less.
+- **Description**:
+  - Direct, 80 characters or fewer,
+  - Capitalize the first letter of the first word; the rest should be lowercase.
+  - Always add a period (.) at the end of the description (IMPORTANT).
+  - e.g., `feat(app): Enhances list display and user interaction.`.
+- **Body**: Explain the "what" and "why." No bullet points or bullet lists, just plain text. Ignore the body if the changes are small or self-explanatory, e.g., `Introduces i18n support for list items.`. Do not list the files to be added in the body. If present, it should be a paragraph of 100 characters or fewer.
 - **Footer**: Only add if breaking changes.
 
 The commit message should be structured as follows:
 
-```
+```text
 <type>(optional scope): <description>
 
 [optional body]
@@ -43,17 +43,17 @@ The commit message should be structured as follows:
 [optional footer(s)]
 ```
 
-### Examples:
+### Examples
 
 `refactor(utils): Moves dependency to correct package declaration.`
 
-```
+```text
 style: Updates layout colors.
 
 The colors are now more vibrant and the layout is more modern.
 ```
 
-```
+```text
 feat(deps): Upgrades `foo` dependency.
 
 BREAKING CHANGE: the bump of the dependency is not compatible with the previous version.
@@ -76,6 +76,6 @@ Use `gh` commands to interact with GitHub.
 - **CodeRabbit Review**: To trigger a CodeRabbit review, first identify the current branch's open Pull Request. If a PR exists, post a comment with `@coderabbitai review` to initiate the review process. If no PR exists, ignore the review process.
   - `gh pr view --json number --jq '.number'`: Get the PR number for the current branch.
   - `gh pr comment <PR_NUMBER> -b "@coderabbitai review"`: Trigger the review.
-- **Resolve CodeRabbit Review locally**: Identify an existing PR for the current branch, if the PR doesn't exists, ignore the process. Else, grab and analize CodeRabbit UNRESOLVED observations and suggestions from the latests comments and proceed to apply them. For the commit plan, use the `generate commit` command as base but separate the commit plan for every observation, I want to review every commit generation. Use the CodeRabbit suggestions to enhance the change motivation and purpose.
+- **Resolve CodeRabbit Review locally**: Identify an existing PR for the current branch. If the PR doesn't exist, ignore the process. Otherwise, grab and analyze CodeRabbit's UNRESOLVED observations and suggestions from the latest comments and proceed to apply them. For the commit plan, use the `generate commit` command as a base but separate the commit plan for every observation; I want to review every commit generation. Use the CodeRabbit suggestions to enhance the change motivation and purpose.
 
   
