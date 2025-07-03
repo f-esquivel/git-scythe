@@ -76,3 +76,6 @@ Use `gh` commands to interact with GitHub.
 - **CodeRabbit Review**: To trigger a CodeRabbit review, first identify the current branch's open Pull Request. If a PR exists, post a comment with `@coderabbitai review` to initiate the review process. If no PR exists, ignore the review process.
   - `gh pr view --json number --jq '.number'`: Get the PR number for the current branch.
   - `gh pr comment <PR_NUMBER> -b "@coderabbitai review"`: Trigger the review.
+- **Resolve CodeRabbit Review locally**: Identify an existing PR for the current branch, if the PR doesn't exists, ignore the process. Else, grab and analize CodeRabbit UNRESOLVED observations and suggestions from the latests comments and proceed to apply them. For the commit plan, use the `generate commit` command as base but separate the commit plan for every observation, I want to review every commit generation. Use the CodeRabbit suggestions to enhance the change motivation and purpose.
+
+  
