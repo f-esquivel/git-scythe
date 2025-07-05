@@ -46,10 +46,14 @@ func run(git types.Gitter, reader io.Reader, writer io.Writer) error {
 
 	fmt.Fprint(writer, "\nDo you want to continue? (Y/n) ")
 	bufReader := bufio.NewReader(reader)
-	input, _ := bufReader.ReadString('\n')
+	input, err := bufReader.ReadString('\n')
+	if err != nil {
+		return fmt.Errorf("failed to read user input: %w", err)
+	}
+
 	input = strings.TrimSpace(input)
 
-	if input == "Y" || input == "y" || input == "" {
+	if input == "" || strings.ToLower(input) == "y" || strings.ToLower(input) == "yes" {
 		fmt.Fprintf(writer, "\nDeleting %d branches...\n", len(branches))
 		successfulDeletions := 0
 		for _, branch := range branches {
