@@ -8,10 +8,6 @@ A fast command-line tool built in Go that safely removes all local branches that
 
 This tool is particularly useful for development teams that create many feature branches and want to maintain a clean and manageable repository without manually pruning each branch.
 
-## Installation
-
-Work in Progress.
-
 ## Usage
 
 To run `git-scythe`, simply execute the command in your terminal:
@@ -28,7 +24,7 @@ The tool will display a list of all local branches that have been merged into yo
 
 ### Example
 
-```
+```bash
 $ git-scythe
 The following merged branches will be deleted:
   > feature/add-login
