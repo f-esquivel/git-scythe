@@ -16,14 +16,51 @@ func New(executor types.CommandExecutor) *GitUtils {
 }
 
 func (g *GitUtils) GetDefaultBranch() (string, error) {
-	cmd := g.executor.Command("git", "rev-parse", "--abbrev-ref", "origin/HEAD")
+	remoteOut, err := g.executor.Command("git", "remote").Output()
+	if err != nil {
+		return "", err
+	}
+
+	// The purpose of this block is to identify the default branch of the
+	// repository. To do this, we first retrieve the list of remotes, then
+	// pick the first one as the default. If the list is not empty and the
+	// first remote is not origin or upstream, we use origin or upstream
+	// as the default remote to get the default branch from. If none of
+	// these are available, we just take the first remote.
+	remotes := strings.Split(strings.TrimSpace(string(remoteOut)), "\n")
+	remote := "origin"
+
+	if len(remotes) > 0 && remotes[0] != "" {
+		// Prefer origin, then upstream, then the first one in the list
+		hasOrigin := false
+		hasUpstream := false
+		for _, r := range remotes {
+			if r == "origin" {
+				hasOrigin = true
+				break
+			}
+			if r == "upstream" {
+				hasUpstream = true
+			}
+		}
+
+		if hasOrigin {
+			remote = "origin"
+		} else if hasUpstream {
+			remote = "upstream"
+		} else {
+			remote = remotes[0]
+		}
+	}
+
+	cmd := g.executor.Command("git", "rev-parse", "--abbrev-ref", remote+"/HEAD")
 
 	out, err := cmd.Output()
 	if err != nil {
 		return "", err
 	}
 
-	sanitizedName := strings.TrimSpace(strings.ReplaceAll(string(out), "origin/", ""))
+	sanitizedName := strings.TrimSpace(strings.ReplaceAll(string(out), remote+"/", ""))
 	return sanitizedName, nil
 }
 
@@ -44,7 +81,7 @@ func (g *GitUtils) GetMergedBranches() ([]string, error) {
 	}
 
 	lines := strings.Split(strings.TrimSpace(out), "\n")
-	var trimmedBranches []string
+	trimmedBranches := make([]string, 0)
 	for _, line := range lines {
 		if line != "" {
 			trimmedBranches = append(trimmedBranches, strings.TrimSpace(line))
