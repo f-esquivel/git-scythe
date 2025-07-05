@@ -416,6 +416,7 @@ func TestGetMergedBranches(t *testing.T) {
 						}
 					}
 					if name == "grep" {
+						// This will likely fail without the `--` separator
 						return &mockCmd{
 							outputFunc: func() ([]byte, error) {
 								return []byte("  --version\n"), nil
@@ -441,6 +442,170 @@ func TestGetMergedBranches(t *testing.T) {
 
 			if !reflect.DeepEqual(result, tt.expectedResult) {
 				t.Errorf("Expected result: %v, got: %v", tt.expectedResult, result)
+			}
+		})
+	}
+}
+
+func TestDeleteBranch(t *testing.T) {
+	tests := []struct {
+		name        string
+		branchName  string
+		force       bool
+		executor    types.CommandExecutor
+		expectedErr bool
+	}{
+		{
+			name:       "delete branch successfully",
+			branchName: "feature/test-branch",
+			force:      false,
+			executor: &mockExecutor{
+				commandFunc: func(name string, arg ...string) types.Cmd {
+					if name == "git" && arg[0] == "branch" && arg[1] == "-d" && arg[2] == "feature/test-branch" {
+						return &mockCmd{
+							outputFunc: func() ([]byte, error) {
+								return []byte(""), nil
+							},
+						}
+					}
+					return &mockCmd{
+						outputFunc: func() ([]byte, error) {
+							return nil, errors.New("unexpected command")
+						},
+					}
+				},
+			},
+			expectedErr: false,
+		},
+		{
+			name:       "force delete branch successfully",
+			branchName: "feature/test-branch",
+			force:      true,
+			executor: &mockExecutor{
+				commandFunc: func(name string, arg ...string) types.Cmd {
+					if name == "git" && arg[0] == "branch" && arg[1] == "-D" && arg[2] == "feature/test-branch" {
+						return &mockCmd{
+
+							outputFunc: func() ([]byte, error) {
+								return []byte(""), nil
+							},
+						}
+					}
+					return &mockCmd{
+						outputFunc: func() ([]byte, error) {
+							return nil, errors.New("unexpected command")
+						},
+					}
+				},
+			},
+			expectedErr: false,
+		},
+		{
+			name:       "delete branch with error",
+			branchName: "feature/test-branch",
+			force:      false,
+			executor: &mockExecutor{
+				commandFunc: func(name string, arg ...string) types.Cmd {
+					return &mockCmd{
+						outputFunc: func() ([]byte, error) {
+							return nil, errors.New("git error")
+						},
+					}
+				},
+			},
+			expectedErr: true,
+		},
+		{
+			name:       "delete unmerged branch without force",
+			branchName: "unmerged-branch",
+			force:      false,
+			executor: &mockExecutor{
+				commandFunc: func(name string, arg ...string) types.Cmd {
+					return &mockCmd{
+						outputFunc: func() ([]byte, error) {
+							return nil, errors.New("error: The branch 'unmerged-branch' is not fully merged.\nIf you are sure you want to delete it, run 'git branch -D unmerged-branch'.")
+						},
+					}
+				},
+			},
+			expectedErr: true,
+		},
+		{
+			name:       "delete non-existent branch",
+			branchName: "non-existent-branch",
+			force:      false,
+			executor: &mockExecutor{
+				commandFunc: func(name string, arg ...string) types.Cmd {
+					return &mockCmd{
+						outputFunc: func() ([]byte, error) {
+							return nil, errors.New("error: branch 'non-existent-branch' not found.")
+						},
+					}
+				},
+			},
+			expectedErr: true,
+		},
+		{
+			name:       "delete current branch",
+			branchName: "main",
+			force:      false,
+			executor: &mockExecutor{
+				commandFunc: func(name string, arg ...string) types.Cmd {
+					return &mockCmd{
+						outputFunc: func() ([]byte, error) {
+							return nil, errors.New("error: Cannot delete branch 'main' checked out at...")
+						},
+					}
+				},
+			},
+			expectedErr: true,
+		},
+		{
+			name:       "force delete unmerged branch",
+			branchName: "unmerged-branch",
+			force:      true,
+			executor: &mockExecutor{
+				commandFunc: func(name string, arg ...string) types.Cmd {
+					if name == "git" && arg[0] == "branch" && arg[1] == "-D" && arg[2] == "unmerged-branch" {
+						return &mockCmd{
+							outputFunc: func() ([]byte, error) {
+								return []byte(""), nil
+							},
+						}
+					}
+					return &mockCmd{
+						outputFunc: func() ([]byte, error) {
+							return nil, errors.New("unexpected command")
+						},
+					}
+				},
+			},
+			expectedErr: false,
+		},
+		{
+			name:       "delete branch with empty name",
+			branchName: "",
+			force:      false,
+			executor: &mockExecutor{
+				commandFunc: func(name string, arg ...string) types.Cmd {
+					return &mockCmd{
+						outputFunc: func() ([]byte, error) {
+							return nil, errors.New("fatal: '' is not a valid branch name.")
+						},
+					}
+				},
+			},
+			expectedErr: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			git := New(tt.executor)
+			err := git.DeleteBranch(tt.branchName, tt.force)
+
+			if (err != nil) != tt.expectedErr {
+				t.Errorf("expected error: %v, got: %v", tt.expectedErr, err)
 			}
 		})
 	}

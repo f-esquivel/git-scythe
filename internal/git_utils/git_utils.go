@@ -89,3 +89,17 @@ func (g *GitUtils) GetMergedBranches() ([]string, error) {
 	}
 	return trimmedBranches, nil
 }
+
+func (g *GitUtils) DeleteBranch(branchName string, force bool) error {
+	args := []string{"branch"}
+	if force {
+		args = append(args, "-D")
+	} else {
+		args = append(args, "-d")
+	}
+	args = append(args, branchName)
+
+	cmd := g.executor.Command("git", args...)
+	_, err := cmd.Output()
+	return err
+}
