@@ -17,3 +17,9 @@ type Cmd interface {
 	Output() ([]byte, error)
 	SetStdin(stdin io.Reader)
 }
+
+// Gitter defines an interface for interacting with a Git repository.
+type Gitter interface {
+	GetMergedBranches() ([]string, error)
+	DeleteBranch(branchName string, force bool) error
+}

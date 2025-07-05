@@ -28,46 +28,50 @@ func (c *execCmd) SetStdin(stdin io.Reader) {
 	c.Stdin = stdin
 }
 
-func main() {
-	git := git_utils.New(OsCommandExecutor{})
-
+func run(git types.Gitter, reader io.Reader, writer io.Writer) error {
 	branches, err := git.GetMergedBranches()
-
 	if err != nil {
-		fmt.Println("Error:", err)
-		os.Exit(1)
+		return err
 	}
 
 	if len(branches) == 0 {
-		fmt.Println("No merged branches to display.")
-		os.Exit(0)
+		fmt.Fprintln(writer, "No merged branches to display.")
+		return nil
 	}
 
-	fmt.Println("The following merged branches will be deleted:")
+	fmt.Fprintln(writer, "The following merged branches will be deleted:")
 	for _, branch := range branches {
-		fmt.Println("  >", branch)
+		fmt.Fprintln(writer, "  >", branch)
 	}
 
-	fmt.Print("\nDo you want to continue? (Y/n) ")
-	reader := bufio.NewReader(os.Stdin)
-	input, _ := reader.ReadString('\n')
+	fmt.Fprint(writer, "\nDo you want to continue? (Y/n) ")
+	bufReader := bufio.NewReader(reader)
+	input, _ := bufReader.ReadString('\n')
 	input = strings.TrimSpace(input)
 
 	if input == "Y" || input == "y" || input == "" {
-		sucessfulDeletions := 0
-		fmt.Printf("\nDeleting %d branches...\n", len(branches))
-
+		fmt.Fprintf(writer, "\nDeleting %d branches...\n", len(branches))
+		successfulDeletions := 0
 		for _, branch := range branches {
 			err := git.DeleteBranch(branch, false)
 			if err != nil {
-				fmt.Printf("  > Error deleting branch %s: %v\n", branch, err)
+				fmt.Fprintf(writer, "  > Error deleting branch %s: %v\n", branch, err)
 			} else {
-				sucessfulDeletions++
+				successfulDeletions++
 			}
 		}
-
-		fmt.Printf("Deleted %d branches.\n", sucessfulDeletions)
+		fmt.Fprintf(writer, "Deleted %d branches.\n", successfulDeletions)
 	} else {
-		fmt.Println("Operation cancelled.")
+		fmt.Fprintln(writer, "Operation cancelled.")
+	}
+
+	return nil
+}
+
+func main() {
+	git := git_utils.New(OsCommandExecutor{})
+	if err := run(git, os.Stdin, os.Stdout); err != nil {
+		fmt.Println("Error:", err)
+		os.Exit(1)
 	}
 }
