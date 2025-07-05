@@ -53,7 +53,7 @@ func run(git types.Gitter, reader io.Reader, writer io.Writer) error {
 
 	input = strings.TrimSpace(input)
 
-	if input == "" || strings.ToLower(input) == "y" || strings.ToLower(input) == "yes" {
+	if strings.ToLower(input) == "y" || strings.ToLower(input) == "yes" {
 		fmt.Fprintf(writer, "\nDeleting %d branches...\n", len(branches))
 		successfulDeletions := 0
 		for _, branch := range branches {
