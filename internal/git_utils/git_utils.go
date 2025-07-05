@@ -77,7 +77,10 @@ func (g *GitUtils) GetMergedBranches() ([]string, error) {
 
 	out, err := cmd_utils.PipeCmds(cmds)
 	if err != nil {
-		return nil, err
+		// If `grep` returns a non-zero exit code, it means no matches were
+		// found. In this case, we can assume that no branches need to be
+		// deleted, so we return an empty list of branches.
+		return []string{}, nil
 	}
 
 	lines := strings.Split(strings.TrimSpace(out), "\n")
