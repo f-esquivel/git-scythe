@@ -102,3 +102,41 @@ func TestRun(t *testing.T) {
 		})
 	}
 }
+
+func TestExecute(t *testing.T) {
+	tests := []struct {
+		name           string
+		args           []string
+		expectedOutput string
+		expectedErr    bool
+	}{
+		{
+			name:           "version flag",
+			args:           []string{"git-scythe", "--version"},
+			expectedOutput: "dev\n",
+			expectedErr:    false,
+		},
+		{
+			name:           "v flag",
+			args:           []string{"git-scythe", "-v"},
+			expectedOutput: "dev\n",
+			expectedErr:    false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			writer := &bytes.Buffer{}
+
+			err := execute(tt.args, writer)
+
+			if (err != nil) != tt.expectedErr {
+				t.Errorf("expected error: %v, got: %v", tt.expectedErr, err)
+			}
+
+			if writer.String() != tt.expectedOutput {
+				t.Errorf("expected output:\n%q\ngot:\n%q", tt.expectedOutput, writer.String())
+			}
+		})
+	}
+}

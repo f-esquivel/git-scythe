@@ -2,7 +2,7 @@
 
 ## Build, Lint, and Test
 
-- **Build**: `go build`
+- **Build**: `go build -o ./bin/git_scythe -ldflags="-X main.version=$(git describe --tags --always --dirty)" ./cmd/git_scythe/git_scythe.go`
 - **Test**: `go test ./...`
 - **Run a single test**: `go test -run ^TestMyFunction`
 - **Lint**: `golangci-lint run` (if installed) or `go vet ./...`

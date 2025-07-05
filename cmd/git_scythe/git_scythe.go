@@ -71,9 +71,20 @@ func run(git types.Gitter, reader io.Reader, writer io.Writer) error {
 	return nil
 }
 
-func main() {
+var version = "dev"
+
+func execute(args []string, writer io.Writer) error {
+	if len(args) > 1 && (args[1] == "--version" || args[1] == "-v") {
+		fmt.Fprintln(writer, version)
+		return nil
+	}
+
 	git := git_utils.New(OsCommandExecutor{})
-	if err := run(git, os.Stdin, os.Stdout); err != nil {
+	return run(git, os.Stdin, writer)
+}
+
+func main() {
+	if err := execute(os.Args, os.Stdout); err != nil {
 		fmt.Fprintln(os.Stderr, "Error:", err)
 		os.Exit(1)
 	}
