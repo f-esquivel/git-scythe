@@ -197,7 +197,7 @@ func TestGetMergedBranches(t *testing.T) {
 					if name == "git" && arg[0] == "rev-parse" {
 						return &mockCmd{
 							outputFunc: func() ([]byte, error) {
-								return []byte("main"), nil
+								return []byte("main\n"), nil
 							},
 						}
 					}
@@ -249,7 +249,7 @@ func TestGetMergedBranches(t *testing.T) {
 					if name == "git" && arg[0] == "rev-parse" {
 						return &mockCmd{
 							outputFunc: func() ([]byte, error) {
-								return []byte("main"), nil
+								return []byte("main\n"), nil
 							},
 						}
 					}
@@ -289,7 +289,7 @@ func TestGetMergedBranches(t *testing.T) {
 					if name == "git" && arg[0] == "rev-parse" {
 						return &mockCmd{
 							outputFunc: func() ([]byte, error) {
-								return []byte("main"), nil
+								return []byte("main\n"), nil
 							},
 						}
 					}
@@ -327,7 +327,7 @@ func TestGetMergedBranches(t *testing.T) {
 					if name == "git" && arg[0] == "rev-parse" {
 						return &mockCmd{
 							outputFunc: func() ([]byte, error) {
-								return []byte("main"), nil
+								return []byte("main\n"), nil
 							},
 						}
 					}
@@ -366,7 +366,7 @@ func TestGetMergedBranches(t *testing.T) {
 					if name == "git" && arg[0] == "rev-parse" {
 						return &mockCmd{
 							outputFunc: func() ([]byte, error) {
-								return []byte("main"), nil
+								return []byte("main\n"), nil
 							},
 						}
 					}
@@ -404,7 +404,7 @@ func TestGetMergedBranches(t *testing.T) {
 					if name == "git" && arg[0] == "rev-parse" {
 						return &mockCmd{
 							outputFunc: func() ([]byte, error) {
-								return []byte("main"), nil
+								return []byte("main\n"), nil
 							},
 						}
 					}
