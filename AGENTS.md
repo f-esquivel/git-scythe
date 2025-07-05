@@ -20,6 +20,20 @@
 - **Concurrency**: Use goroutines and channels for concurrent operations.
 - **Testing**: Write unit tests for all new features and bug fixes.
 
+## Test Coverage Enhancement Workflow
+
+When asked to improve test coverage or reliability, follow this iterative process:
+
+1.  **Identify Gaps**: Analyze the existing code and test suites to identify a list of meaningful edge cases and reliability scenarios that are not yet covered. Present this list to the user.
+2.  **Propose One Test**: Ask the user which test from the list to implement first. If the user doesn't specify, recommend one (e.g., the most critical or foundational).
+3.  **Implement and Verify**: For the chosen test scenario, follow this sub-process:
+    a. Add a new test case to the appropriate test suite. This test should validate the new scenario.
+    b. Run the tests. It's okay if the new test fails; this often proves the test is valid.
+    c. If the test fails, refactor the application code to make it pass.
+    d. Run the tests again to confirm that all tests, including the new one, are passing.
+4.  **Document the Scenario**: Once the test is passing, update the corresponding module's `README.md` file. Add the new scenario to the test summary table, clearly explaining its purpose, motivation, and utility.
+5.  **Repeat**: Ask the user for the next test to implement from the list, and repeat the process.
+
 ## Commit Messages
 
 - **Format**: Use [Conventional Commits](https://www.conventionalcommits.org/).
@@ -78,5 +92,3 @@ Use `gh` commands to interact with GitHub.
   - `gh pr view --json number --jq '.number'`: Get the PR number for the current branch.
   - `gh pr comment <PR_NUMBER> -b "@coderabbitai review"`: Trigger the review.
 - **Resolve CodeRabbit Review locally**: Identify an existing PR for the current branch. If the PR doesn't exist, ignore the process. Otherwise, grab and analyze CodeRabbit's UNRESOLVED observations and suggestions from the latest comments and proceed to apply them. For the commit plan, use the `generate commit` command as a base but separate the commit plan for every observation; I want to review every commit generation. Use the CodeRabbit suggestions to enhance the change motivation and purpose.
-
-  
