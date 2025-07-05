@@ -20,9 +20,22 @@ The tool will display a list of all local branches that have been merged into yo
 
 ### Options
 
--   `--version`, `-v`: Print the version of the `git-scythe` tool.
+- `--version`, `-v`: Print the version of the `git-scythe` tool.
 
-### Example
+## Examples
+
+### Displaying the Version
+
+To check the installed version of `git-scythe`, use the `--version` or `-v` flag.
+
+```bash
+$ git-scythe --version
+git-scythe v0.1.0
+```
+
+### Deleting Merged Branches
+
+When you run `git-scythe` without any flags, it will scan for local branches that have been merged into your default branch, list them, and ask for confirmation before deleting them.
 
 ```bash
 $ git-scythe
@@ -34,6 +47,15 @@ Do you want to continue? (Y/n) y
 
 Deleting 2 branches...
 Deleted 2 branches.
+```
+
+### No Branches to Delete
+
+If there are no merged branches to delete, the tool will inform you and exit gracefully.
+
+```bash
+$ git-scythe
+No merged branches to display.
 ```
 
 ## Contributing
