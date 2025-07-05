@@ -4,7 +4,7 @@
 
 - **Build**: `go build`
 - **Test**: `go test ./...`
-- **Run a single test**: `go test -run ^TestMyFunction$`
+- **Run a single test**: `go test -run ^TestMyFunction`
 - **Lint**: `golangci-lint run` (if installed) or `go vet ./...`
 
 ## Code Style
@@ -28,7 +28,7 @@ When asked to improve test coverage or reliability, follow this iterative proces
 2.  **Propose One Test**: Ask the user which test from the list to implement first. If the user doesn't specify, recommend one (e.g., the most critical or foundational).
 3.  **Implement and Verify**: For the chosen test scenario, follow this sub-process:
     a. Add a new test case to the appropriate test suite. This test should validate the new scenario.
-    b. Run the tests. It's okay if the new test fails; this often proves the test is valid.
+    b. Run the new test and confirm that it fails for the expected reason. This "red" status is crucial to validate that the test is correctly targeting the gap before any code is written.
     c. If the test fails, refactor the application code to make it pass.
     d. Run the tests again to confirm that all tests, including the new one, are passing.
 4.  **Document the Scenario**: Once the test is passing, update the corresponding module's `README.md` file. Add the new scenario to the test summary table, clearly explaining its purpose, motivation, and utility.
