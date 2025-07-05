@@ -273,12 +273,12 @@ func TestGetMergedBranches(t *testing.T) {
 				},
 			},
 			expectedResult: []string{},
-            expectedError:  false,
-        },
-        {
-            name: "unusual branch names",
-            executor: &mockExecutor{
-                commandFunc: func(name string, arg ...string) types.Cmd {
+			expectedError:  false,
+		},
+		{
+			name: "unusual branch names",
+			executor: &mockExecutor{
+				commandFunc: func(name string, arg ...string) types.Cmd {
 					if name == "git" && arg[0] == "remote" {
 						return &mockCmd{
 							outputFunc: func() ([]byte, error) {
@@ -286,37 +286,37 @@ func TestGetMergedBranches(t *testing.T) {
 							},
 						}
 					}
-                    if name == "git" && arg[0] == "rev-parse" {
-                        return &mockCmd{
-                            outputFunc: func() ([]byte, error) {
-                                return []byte("main"), nil
-                            },
-                        }
-                    }
-                    if name == "git" && arg[0] == "branch" {
-                        return &mockCmd{
-                            stdoutPipeFunc: func() (io.ReadCloser, error) {
-                                return io.NopCloser(nil), nil
-                            },
-                        }
-                    }
-                    if name == "grep" {
-                        return &mockCmd{
-                            outputFunc: func() ([]byte, error) {
-                                return []byte("  feature/new-login\n  fix/a-bug\n"), nil
-                            },
-                        }
-                    }
-                    return &mockCmd{}
-                },
-            },
-            expectedResult: []string{"feature/new-login", "fix/a-bug"},
-            expectedError:  false,
-        },
-        {
-            name: "detached HEAD state",
-            executor: &mockExecutor{
-                commandFunc: func(name string, arg ...string) types.Cmd {
+					if name == "git" && arg[0] == "rev-parse" {
+						return &mockCmd{
+							outputFunc: func() ([]byte, error) {
+								return []byte("main"), nil
+							},
+						}
+					}
+					if name == "git" && arg[0] == "branch" {
+						return &mockCmd{
+							stdoutPipeFunc: func() (io.ReadCloser, error) {
+								return io.NopCloser(nil), nil
+							},
+						}
+					}
+					if name == "grep" {
+						return &mockCmd{
+							outputFunc: func() ([]byte, error) {
+								return []byte("  feature/new-login\n  fix/a-bug\n"), nil
+							},
+						}
+					}
+					return &mockCmd{}
+				},
+			},
+			expectedResult: []string{"feature/new-login", "fix/a-bug"},
+			expectedError:  false,
+		},
+		{
+			name: "detached HEAD state",
+			executor: &mockExecutor{
+				commandFunc: func(name string, arg ...string) types.Cmd {
 					if name == "git" && arg[0] == "remote" {
 						return &mockCmd{
 							outputFunc: func() ([]byte, error) {
@@ -324,38 +324,38 @@ func TestGetMergedBranches(t *testing.T) {
 							},
 						}
 					}
-                    if name == "git" && arg[0] == "rev-parse" {
-                        return &mockCmd{
-                            outputFunc: func() ([]byte, error) {
-                                return []byte("main"), nil
-                            },
-                        }
-                    }
-                    if name == "git" && arg[0] == "branch" {
-                        return &mockCmd{
-                            stdoutPipeFunc: func() (io.ReadCloser, error) {
-                                return io.NopCloser(nil), nil
-                            },
-                        }
-                    }
-                    if name == "grep" {
-                        return &mockCmd{
-                            outputFunc: func() ([]byte, error) {
-                                // Simulate grep filtering out the detached head line
-                                return []byte("  a-branch\n  another-branch\n"), nil
-                            },
-                        }
-                    }
-                    return &mockCmd{}
-                },
-            },
-            expectedResult: []string{"a-branch", "another-branch"},
-            expectedError:  false,
-        },
-        {
-            name: "branch names with spaces",
-            executor: &mockExecutor{
-                commandFunc: func(name string, arg ...string) types.Cmd {
+					if name == "git" && arg[0] == "rev-parse" {
+						return &mockCmd{
+							outputFunc: func() ([]byte, error) {
+								return []byte("main"), nil
+							},
+						}
+					}
+					if name == "git" && arg[0] == "branch" {
+						return &mockCmd{
+							stdoutPipeFunc: func() (io.ReadCloser, error) {
+								return io.NopCloser(nil), nil
+							},
+						}
+					}
+					if name == "grep" {
+						return &mockCmd{
+							outputFunc: func() ([]byte, error) {
+								// Simulate grep filtering out the detached head line
+								return []byte("  a-branch\n  another-branch\n"), nil
+							},
+						}
+					}
+					return &mockCmd{}
+				},
+			},
+			expectedResult: []string{"a-branch", "another-branch"},
+			expectedError:  false,
+		},
+		{
+			name: "branch names with spaces",
+			executor: &mockExecutor{
+				commandFunc: func(name string, arg ...string) types.Cmd {
 					if name == "git" && arg[0] == "remote" {
 						return &mockCmd{
 							outputFunc: func() ([]byte, error) {
@@ -363,33 +363,33 @@ func TestGetMergedBranches(t *testing.T) {
 							},
 						}
 					}
-                    if name == "git" && arg[0] == "rev-parse" {
-                        return &mockCmd{
-                            outputFunc: func() ([]byte, error) {
-                                return []byte("main"), nil
-                            },
-                        }
-                    }
-                    if name == "git" && arg[0] == "branch" {
-                        return &mockCmd{
-                            stdoutPipeFunc: func() (io.ReadCloser, error) {
-                                return io.NopCloser(nil), nil
-                            },
-                        }
-                    }
-                    if name == "grep" {
-                        return &mockCmd{
-                            outputFunc: func() ([]byte, error) {
-                                return []byte("  a feature branch\n  another branch with spaces\n"), nil
-                            },
-                        }
-                    }
-                    return &mockCmd{}
-                },
-            },
-            expectedResult: []string{"a feature branch", "another branch with spaces"},
-            expectedError:  false,
-        },
+					if name == "git" && arg[0] == "rev-parse" {
+						return &mockCmd{
+							outputFunc: func() ([]byte, error) {
+								return []byte("main"), nil
+							},
+						}
+					}
+					if name == "git" && arg[0] == "branch" {
+						return &mockCmd{
+							stdoutPipeFunc: func() (io.ReadCloser, error) {
+								return io.NopCloser(nil), nil
+							},
+						}
+					}
+					if name == "grep" {
+						return &mockCmd{
+							outputFunc: func() ([]byte, error) {
+								return []byte("  a feature branch\n  another branch with spaces\n"), nil
+							},
+						}
+					}
+					return &mockCmd{}
+				},
+			},
+			expectedResult: []string{"a feature branch", "another branch with spaces"},
+			expectedError:  false,
+		},
 		{
 			name: "branch name conflicts with flag",
 			executor: &mockExecutor{
@@ -429,10 +429,10 @@ func TestGetMergedBranches(t *testing.T) {
 			expectedResult: []string{"--version"},
 			expectedError:  false,
 		},
-    }
+	}
 
-    for _, tt := range tests {
-        t.Run(tt.name, func(t *testing.T) {
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
 			git := New(tt.executor)
 			result, err := git.GetMergedBranches()
 
