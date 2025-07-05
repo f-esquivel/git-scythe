@@ -51,9 +51,8 @@ func run(git types.Gitter, reader io.Reader, writer io.Writer) error {
 		return fmt.Errorf("failed to read user input: %w", err)
 	}
 
-	input = strings.TrimSpace(input)
-
-	if strings.ToLower(input) == "y" || strings.ToLower(input) == "yes" {
+	input = strings.ToLower(strings.TrimSpace(input))
+	if input == "" || input == "y" || input == "yes" {
 		fmt.Fprintf(writer, "\nDeleting %d branches...\n", len(branches))
 		successfulDeletions := 0
 		for _, branch := range branches {
