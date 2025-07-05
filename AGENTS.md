@@ -102,10 +102,10 @@ When asked to create a pull request from a feature branch, follow these steps:
 2.  **Select Target Branch**: Ask the user to specify the target `release/*` branch for the pull request.
 3.  **Generate Title and Description**:
     *   Generate a concise and descriptive PR title that follows the [Conventional Commits](https://www.conventionalcommits.org/) standard.
-    *   Generate a comprehensive PR description by summarizing the commits from the feature branch. The description should be structured with the following sections:
+    *   Generate a comprehensive PR description by synthesizing the changes from the feature branch commits. The description should be structured with the following sections:
         *   **What this PR does**: A detailed explanation of the changes, including the problem being solved and the approach taken.
-        *   **Summary of Changes**: A bulleted list of the key commits and their impact.
-        *   **How to test**: Clear instructions for reviewers on how to validate the changes (e.g., commands to run, manual testing steps).
+        *   **Summary of Changes**: A synthesized summary of key changes. Instead of listing raw commit messages, group the work into categories like **New Features**, **Improvements**, and **Refactoring** to provide a clear overview of the updates.
+        *   **How to test**: Provide practical, command-line-ready steps for testing. Focus on concrete validation actions rather than abstract descriptions.
 4.  **Request Approval**: Present the generated title and description to the user for approval. **Do not proceed without explicit confirmation.**
 5.  **Create the PR**: Once approved, use the `gh pr create` command to open the pull request.
 
@@ -126,10 +126,9 @@ When asked to create a pull request from a feature branch, follow these steps:
 
     ### Summary of Changes
 
-    - feat(api): Add new `/register` and `/login` endpoints.
-    - feat(auth): Implement password hashing using bcrypt.
-    - feat(auth): Generate and validate JWTs for authenticated sessions.
-    - test(auth): Add unit tests for authentication logic.
+    - **New Feature**: Implemented a complete user authentication system with registration (`/register`) and login (`/login`) endpoints.
+    - **Security**: Added password hashing using bcrypt and JWT-based session management to secure user credentials and sessions.
+    - **Testing**: Introduced comprehensive unit tests for the new authentication logic to ensure reliability.
 
     ### How to test
 
