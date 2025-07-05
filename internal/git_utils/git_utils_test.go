@@ -467,6 +467,44 @@ func TestGetMergedBranches(t *testing.T) {
 			expectedResult: []string{},
 			expectedError:  false,
 		},
+		{
+			name: "grep returns a critical error",
+			executor: &mockExecutor{
+				commandFunc: func(name string, arg ...string) types.Cmd {
+					if name == "git" && arg[0] == "remote" {
+						return &mockCmd{
+							outputFunc: func() ([]byte, error) {
+								return []byte("origin"), nil
+							},
+						}
+					}
+					if name == "git" && arg[0] == "rev-parse" {
+						return &mockCmd{
+							outputFunc: func() ([]byte, error) {
+								return []byte("main"), nil
+							},
+						}
+					}
+					if name == "git" && arg[0] == "branch" {
+						return &mockCmd{
+							stdoutPipeFunc: func() (io.ReadCloser, error) {
+								return io.NopCloser(nil), nil
+							},
+						}
+					}
+					if name == "grep" {
+						return &mockCmd{
+							outputFunc: func() ([]byte, error) {
+								return nil, errors.New("exit status 2")
+							},
+						}
+					}
+					return &mockCmd{}
+				},
+			},
+			expectedResult: nil,
+			expectedError:  true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

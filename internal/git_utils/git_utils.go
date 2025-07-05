@@ -69,10 +69,12 @@ func (g *GitUtils) GetMergedBranches() ([]string, error) {
 
 	out, err := cmd_utils.PipeCmds(cmds)
 	if err != nil {
-		// If `grep` returns a non-zero exit code, it means no matches were
-		// found. In this case, we can assume that no branches need to be
-		// deleted, so we return an empty list of branches.
-		return []string{}, nil
+		// grep returns exit code 1 when no lines match, which is expected
+		// when there are no merged branches. Other errors should be propagated.
+		if strings.Contains(err.Error(), "exit status 1") {
+			return []string{}, nil
+		}
+		return nil, err
 	}
 
 	lines := strings.Split(strings.TrimSpace(out), "\n")
