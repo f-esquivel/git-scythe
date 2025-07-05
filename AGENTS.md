@@ -111,10 +111,10 @@ When asked to create a pull request from a feature branch, follow these steps:
 
 **Example Workflow:**
 
-*   **User**: "Create a PR for this feature."
-*   **Agent**: "This feature branch will be merged into which `release/*` branch?"
-*   **User**: "release/v1.2.0"
-*   **Agent**: "I have generated the following title and description for the pull request:
+* **User**: "Create a PR for this feature."
+* **Agent**: "This feature branch will be merged into which `release/*` branch?"
+* **User**: "release/v1.2.0"
+* **Agent**: "I have generated the following title and description for the pull request:
 
     **Title:** `feat(auth): Implement user authentication`
 
@@ -139,5 +139,5 @@ When asked to create a pull request from a feature branch, follow these steps:
     ```
 
     Should I proceed with creating the pull request?"
-*   **User**: "Yes"
-*   **Agent**: (Executes `gh pr create ...`)
+* **User**: "Yes"
+* **Agent**: (Executes `gh pr create ...`)
