@@ -222,6 +222,44 @@ func TestGetMergedBranches(t *testing.T) {
 			expectedError:  false,
 		},
 		{
+			name: "successful execution with default branch",
+			executor: &mockExecutor{
+				commandFunc: func(name string, arg ...string) types.Cmd {
+					if name == "git" && arg[0] == "remote" {
+						return &mockCmd{
+							outputFunc: func() ([]byte, error) {
+								return []byte("origin\n"), nil
+							},
+						}
+					}
+					if name == "git" && arg[0] == "rev-parse" {
+						return &mockCmd{
+							outputFunc: func() ([]byte, error) {
+								return []byte("main\n"), nil
+							},
+						}
+					}
+					if name == "git" && arg[0] == "branch" && arg[1] == "--merged" && arg[2] == "main" {
+						return &mockCmd{
+							stdoutPipeFunc: func() (io.ReadCloser, error) {
+								return io.NopCloser(nil), nil
+							},
+						}
+					}
+					if name == "grep" {
+						return &mockCmd{
+							outputFunc: func() ([]byte, error) {
+								return []byte("  branch1\n  branch2\n"), nil
+							},
+						}
+					}
+					return &mockCmd{}
+				},
+			},
+			expectedResult: []string{"branch1", "branch2"},
+			expectedError:  false,
+		},
+		{
 			name: "error in getting default branch",
 			executor: &mockExecutor{
 				commandFunc: func(name string, arg ...string) types.Cmd {

@@ -63,7 +63,7 @@ func (g *GitUtils) GetMergedBranches() ([]string, error) {
 	}
 
 	cmds := []types.Cmd{
-		g.executor.Command("git", "branch", "--merged"),
+		g.executor.Command("git", "branch", "--merged", defaultBranch),
 		g.executor.Command("grep", "-v", "-e", "*", "-e", defaultBranch),
 	}
 
