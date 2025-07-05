@@ -74,7 +74,7 @@ func run(git types.Gitter, reader io.Reader, writer io.Writer) error {
 func main() {
 	git := git_utils.New(OsCommandExecutor{})
 	if err := run(git, os.Stdin, os.Stdout); err != nil {
-		fmt.Println("Error:", err)
+		fmt.Fprintln(os.Stderr, "Error:", err)
 		os.Exit(1)
 	}
 }
