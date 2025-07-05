@@ -101,11 +101,11 @@ When asked to create a pull request from a feature branch, follow these steps:
 1.  **Verify Branch Type**: Check if the current branch is a `feature/*` branch. If not, inform the user that this action is only for feature branches.
 2.  **Select Target Branch**: Ask the user to specify the target `release/*` branch for the pull request.
 3.  **Generate Title and Description**:
-    *   Generate a concise and descriptive PR title that follows the [Conventional Commits](https://www.conventionalcommits.org/) standard.
-    *   Generate a comprehensive PR description by synthesizing the changes from the feature branch commits. The description should be structured with the following sections:
-        *   **What this PR does**: A detailed explanation of the changes, including the problem being solved and the approach taken.
-        *   **Summary of Changes**: A synthesized summary of key changes. Instead of listing raw commit messages, group the work into categories like **New Features**, **Improvements**, and **Refactoring** to provide a clear overview of the updates.
-        *   **How to test**: Provide practical, command-line-ready steps for testing. Focus on concrete validation actions rather than abstract descriptions.
+    -   Generate a concise and descriptive PR title that follows the [Conventional Commits](https://www.conventionalcommits.org/) standard.
+    -   Generate a comprehensive PR description by synthesizing the changes from the feature branch commits. The description should be structured with the following sections:
+        -   **What this PR does**: A detailed explanation of the changes, including the problem being solved and the approach taken.
+        -   **Summary of Changes**: A synthesized summary of key changes. Instead of listing raw commit messages, group the work into categories like **New Features**, **Improvements**, and **Refactoring** to provide a clear overview of the updates.
+        -   **How to test**: Provide practical, command-line-ready steps for testing. Focus on concrete validation actions rather than abstract descriptions.
 4.  **Request Approval**: Present the generated title and description to the user for approval. **Do not proceed without explicit confirmation.**
 5.  **Create the PR**: Once approved, use the `gh pr create` command to open the pull request.
 
