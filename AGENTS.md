@@ -92,3 +92,52 @@ Use `gh` commands to interact with GitHub.
   - `gh pr view --json number --jq '.number'`: Get the PR number for the current branch.
   - `gh pr comment <PR_NUMBER> -b "@coderabbitai review"`: Trigger the review.
 - **Resolve CodeRabbit Review locally**: Identify an existing PR for the current branch. If the PR doesn't exist, ignore the process. Otherwise, grab and analyze CodeRabbit's UNRESOLVED observations and suggestions from the latest comments and proceed to apply them. For the commit plan, use the `generate commit` command as a base but separate the commit plan for every observation; I want to review every commit generation. Use the CodeRabbit suggestions to enhance the change motivation and purpose.
+
+### Creating a Pull Request
+
+When asked to create a pull request from a feature branch, follow these steps:
+
+1.  **Verify Branch Type**: Check if the current branch is a `feature/*` branch. If not, inform the user that this action is only for feature branches.
+2.  **Select Target Branch**: Ask the user to specify the target `release/*` branch for the pull request.
+3.  **Generate Title and Description**:
+    *   Generate a concise and descriptive PR title that follows the [Conventional Commits](https://www.conventionalcommits.org/) standard.
+    *   Generate a comprehensive PR description by summarizing the commits from the feature branch. The description should be structured with the following sections:
+        *   **What this PR does**: A detailed explanation of the changes, including the problem being solved and the approach taken.
+        *   **Summary of Changes**: A bulleted list of the key commits and their impact.
+        *   **How to test**: Clear instructions for reviewers on how to validate the changes (e.g., commands to run, manual testing steps).
+4.  **Request Approval**: Present the generated title and description to the user for approval. **Do not proceed without explicit confirmation.**
+5.  **Create the PR**: Once approved, use the `gh pr create` command to open the pull request.
+
+**Example Workflow:**
+
+*   **User**: "Create a PR for this feature."
+*   **Agent**: "This feature branch will be merged into which `release/*` branch?"
+*   **User**: "release/v1.2.0"
+*   **Agent**: "I have generated the following title and description for the pull request:
+
+    **Title:** `feat(auth): Implement user authentication`
+
+    **Description:**
+    ```md
+    ### What this PR does
+
+    This pull request introduces a complete user authentication system. It adds endpoints for user registration and login, handles password hashing for security, and introduces JWT-based session management. This resolves issue #42.
+
+    ### Summary of Changes
+
+    - feat(api): Add new `/register` and `/login` endpoints.
+    - feat(auth): Implement password hashing using bcrypt.
+    - feat(auth): Generate and validate JWTs for authenticated sessions.
+    - test(auth): Add unit tests for authentication logic.
+
+    ### How to test
+
+    1.  Run `go test ./...` to ensure all new and existing tests pass.
+    2.  (Optional) Run the application and use a tool like `curl` to manually test the new endpoints:
+        - `curl -X POST -H "Content-Type: application/json" -d '{"username":"test","password":"password"}' http://localhost:8080/register`
+        - `curl -X POST -H "Content-Type: application/json" -d '{"username":"test","password":"password"}' http://localhost:8080/login`
+    ```
+
+    Should I proceed with creating the pull request?"
+*   **User**: "Yes"
+*   **Agent**: (Executes `gh pr create ...`)
