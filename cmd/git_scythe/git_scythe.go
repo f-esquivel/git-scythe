@@ -1,10 +1,12 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"io"
 	"os"
 	"os/exec"
+	"strings"
 
 	"github.com/franklinesquivel/git-scythe/internal/git_utils"
 	"github.com/franklinesquivel/git-scythe/internal/types"
@@ -29,7 +31,6 @@ func (c *execCmd) SetStdin(stdin io.Reader) {
 func main() {
 	git := git_utils.New(OsCommandExecutor{})
 
-	// Get the merged branches.
 	branches, err := git.GetMergedBranches()
 
 	if err != nil {
@@ -42,8 +43,31 @@ func main() {
 		os.Exit(0)
 	}
 
-	fmt.Println("Merged branches:")
+	fmt.Println("The following merged branches will be deleted:")
 	for _, branch := range branches {
-		fmt.Println("  > ", branch)
+		fmt.Println("  >", branch)
+	}
+
+	fmt.Print("\nDo you want to continue? (Y/n) ")
+	reader := bufio.NewReader(os.Stdin)
+	input, _ := reader.ReadString('\n')
+	input = strings.TrimSpace(input)
+
+	if input == "Y" || input == "y" || input == "" {
+		sucessfulDeletions := 0
+		fmt.Printf("\nDeleting %d branches...\n", len(branches))
+
+		for _, branch := range branches {
+			err := git.DeleteBranch(branch, false)
+			if err != nil {
+				fmt.Printf("  > Error deleting branch %s: %v\n", branch, err)
+			} else {
+				sucessfulDeletions++
+			}
+		}
+
+		fmt.Printf("Deleted %d branches.\n", sucessfulDeletions)
+	} else {
+		fmt.Println("Operation cancelled.")
 	}
 }
