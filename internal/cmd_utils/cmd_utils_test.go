@@ -51,6 +51,16 @@ func (m *mockCmd) SetStdin(stdin io.Reader) {
 	}
 }
 
+func compareErrors(a, b error) bool {
+	if a == nil && b == nil {
+		return true
+	}
+	if a != nil && b != nil {
+		return a.Error() == b.Error()
+	}
+	return false
+}
+
 func TestPipeCmds(t *testing.T) {
 	tests := []struct {
 		name        string
@@ -222,7 +232,7 @@ func TestPipeCmds(t *testing.T) {
 				t.Errorf("expected output %q, got %q", tt.expectedOut, out)
 			}
 
-			if (err == nil && tt.expectedErr != nil) || (err != nil && tt.expectedErr == nil) || (err != nil && tt.expectedErr != nil && err.Error() != tt.expectedErr.Error()) {
+			if !compareErrors(err, tt.expectedErr) {
 				t.Errorf("expected error %v, got %v", tt.expectedErr, err)
 			}
 		})
