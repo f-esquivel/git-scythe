@@ -1,61 +1,54 @@
 package git_utils
 
 import (
-	"os/exec"
 	"strings"
+
+	"github.com/franklinesquivel/git-scythe/internal/cmd_utils"
+	"github.com/franklinesquivel/git-scythe/internal/types"
 )
 
-func getDefaultBranch() (string, error) {
-	cmd := exec.Command("git", "rev-parse", "--abbrev-ref", "origin/HEAD")
+type GitUtils struct {
+	executor types.CommandExecutor
+}
+
+func New(executor types.CommandExecutor) *GitUtils {
+	return &GitUtils{executor: executor}
+}
+
+func (g *GitUtils) GetDefaultBranch() (string, error) {
+	cmd := g.executor.Command("git", "rev-parse", "--abbrev-ref", "origin/HEAD")
 
 	out, err := cmd.Output()
-
 	if err != nil {
 		return "", err
 	}
 
-	replacedName := strings.ReplaceAll(string(out), "origin/", "")
-	return strings.TrimSpace(replacedName), nil
+	sanitizedName := strings.TrimSpace(strings.ReplaceAll(string(out), "origin/", ""))
+	return sanitizedName, nil
 }
 
-func GetMergedBranches() ([]string, error) {
-	defaultBranch, err := getDefaultBranch()
-
+func (g *GitUtils) GetMergedBranches() ([]string, error) {
+	defaultBranch, err := g.GetDefaultBranch()
 	if err != nil {
 		return nil, err
 	}
 
-	gitMergedBranchesCmd := exec.Command("git", "branch", "--merged")
-	grepCmd := exec.Command("grep", "-v", "-e", "*", "-e", defaultBranch)
+	cmds := []types.Cmd{
+		g.executor.Command("git", "branch", "--merged"),
+		g.executor.Command("grep", "-v", "-e", "*", "-e", defaultBranch),
+	}
 
-	pipe, err := gitMergedBranchesCmd.StdoutPipe()
-
+	out, err := cmd_utils.PipeCmds(cmds)
 	if err != nil {
 		return nil, err
 	}
 
-	defer pipe.Close()
-
-	grepCmd.Stdin = pipe
-
-	if err := gitMergedBranchesCmd.Start(); err != nil {
-		return nil, err
-	}
-
-	out, err := grepCmd.Output()
-
-	if err != nil {
-		return nil, err
-	}
-
-	lines := strings.Split(strings.TrimSpace(string(out)), "\n")
-
+	lines := strings.Split(strings.TrimSpace(out), "\n")
 	var trimmedBranches []string
 	for _, line := range lines {
 		if line != "" {
 			trimmedBranches = append(trimmedBranches, strings.TrimSpace(line))
 		}
 	}
-
 	return trimmedBranches, nil
 }
